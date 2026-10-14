@@ -123,3 +123,17 @@ ggplot(df, aes(x = agreeableness, y = communication)) +
 model <- lm(communication ~ agreeableness, data = df)
 summary(model)
 
+
+#############Checking the data###############################################################
+#Checking team size
+names(df)[grepl("Team", names(df), ignore.case = TRUE)]
+table(df$Team, useNA = "ifany")
+length(unique(df$id))
+length(unique(df$Team))
+sort(table(df$Team))
+
+#checking for missing values
+sum(is.na(df))
+# Count missing values in each column
+colSums(is.na(df))
+
