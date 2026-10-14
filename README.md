@@ -1,16 +1,11 @@
 # group-project
-hello everyone
-
 
 
 https://osf.io/jb94w/overview                     <- explanation of variables 
 
 https://itemresponsewarehouse.org/tables/zaehl2023_hexaco/    
 
-to load the dataset to R just copy this code: 
-
-df <- read.csv("https://redivis.com/api/v1/tables/datapages.item_response_warehouse_2:v33_0.zaehl2023_hexaco/rows?format=csv") 
-
+the complete dataset is there: df <- read.csv2("https://osf.io/download/k4syv/")
  
 
 HEXACO personality and teamwork dataset 
@@ -21,7 +16,6 @@ This is the closest match I found to your idea. It contains personality question
 
 Item Response Warehouse 
 
-+3 
 
 Useful links: 
 
