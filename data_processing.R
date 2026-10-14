@@ -43,12 +43,12 @@ C_items <- c("F02", "F26r", "F08", "F32r", "F14r", "F38", "F50",
 O_items <- c("F01r", "F25", "F07", "F31r", "F13", "F37",
              "F49r", "F19", "F43", "F55")
 
-df$H <- rowMeans(df[, H_items], na.rm = TRUE)
-df$E <- rowMeans(df[, E_items], na.rm = TRUE)
-df$X <- rowMeans(df[, X_items], na.rm = TRUE)
-df$A <- rowMeans(df[, A_items], na.rm = TRUE)
-df$C <- rowMeans(df[, C_items], na.rm = TRUE)
-df$O <- rowMeans(df[, O_items], na.rm = TRUE)
+df$honesty_humility <- rowMeans(df[, H_items], na.rm = TRUE)
+df$emotionality <- rowMeans(df[, E_items], na.rm = TRUE)
+df$extraversion <- rowMeans(df[, X_items], na.rm = TRUE)
+df$agreeableness <- rowMeans(df[, A_items], na.rm = TRUE)
+df$conscientiousness <- rowMeans(df[, C_items], na.rm = TRUE)
+df$openness <- rowMeans(df[, O_items], na.rm = TRUE)
 
 # TWQ has six dimensions: Communication (CMNC), Coordination (CRDN),
 # Balance (BLNC), Support (SPRT), Commitment (COMT), Cohesion (COHS)
@@ -71,11 +71,55 @@ COHS_items <- c("COHS01", "COHS02r", "COHS03", "COHS04", "COHS05",
                 "COHS06r", "COHS07", "COHS08", "COHS09", "COHS10")
 
 # calculate scores for each TWQ dimension
-df$communication <- round(rowMeans(df[, CMNC_items], na.rm = TRUE),2)
-df$coordination  <- rowMeans(df[, CRDN_items], na.rm = TRUE)
-df$balance       <- rowMeans(df[, BLNC_items], na.rm = TRUE)
-df$support       <- rowMeans(df[, SPRT_items], na.rm = TRUE)
-df$commitment    <- rowMeans(df[, COMT_items], na.rm = TRUE)
-df$cohesion      <- rowMeans(df[, COHS_items], na.rm = TRUE)
+df$communication <- rowMeans(df[, CMNC_items], na.rm = TRUE)
+df$coordination <- rowMeans(df[, CRDN_items], na.rm = TRUE)
+df$balance <- rowMeans(df[, BLNC_items], na.rm = TRUE)
+df$support <- rowMeans(df[, SPRT_items], na.rm = TRUE)
+df$commitment <- rowMeans(df[, COMT_items], na.rm = TRUE)
+df$cohesion <- rowMeans(df[, COHS_items], na.rm = TRUE)
 
-names(df)
+# Summary table: mean and SD for HEXACO and TWQ
+vars <- c("honesty_humility", "emotionality", "extraversion", 
+          "agreeableness", "conscientiousness", "openness",
+          "communication", "coordination", "balance",
+          "support", "commitment", "cohesion")
+
+summary_table <- data.frame(
+  variable <- vars,
+  mean <- sapply(df[, vars], mean, na.rm = TRUE),
+  sd <- sapply(df[, vars], sd, na.rm = TRUE)
+)
+
+summary_table$mean <- round(summary_table$mean, 2)
+summary_table$sd <- round(summary_table$sd, 2)
+summary_table$type <- c(rep("HEXACO", 6), rep("TWQ", 6))
+
+# correlation analysis
+cor_vars <- c("honesty_humility", "emotionality", "extraversion",
+              "agreeableness", "conscientiousness", "openness",
+              "communication", "coordination", "balance",
+              "support", "commitment", "cohesion")
+
+cor_mat <- cor(df[, cor_vars], use = "pairwise.complete.obs")
+round(cor_mat, 2)
+
+# an example of plotting
+# I chose "agreeableness" (HEXACO) and "communication" (TWQ) as an example,
+# because they showed the strongest correlation.
+library(ggplot2)
+
+ggplot(df, aes(x = agreeableness, y = communication)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, color = "blue") +
+  labs(
+    x = "Agreebleness",
+    y = "Communication",
+    title = "Agreebleness vs Communication"
+  ) +
+  theme_classic()
+
+# also here is the example of regression.
+# regression: does agreeableness predict communication?
+model <- lm(communication ~ agreeableness, data = df)
+summary(model)
+
