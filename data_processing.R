@@ -1,25 +1,8 @@
-df <- read.csv("https://redivis.com/api/v1/tables/datapages.item_response_warehouse_2:v33_0.zaehl2023_hexaco/rows?format=csv")
+df <- read.csv2("https://osf.io/download/k4syv/")
 
 library(tidyr)
 
-# convert the data frame from long format to wide format
-# so that each row represents one participant
-df_wide <- df %>%
-  pivot_wider(
-    id_cols = c(id, cov_gender, cov_age, cov_degree),
-    names_from = item,
-    values_from = resp
-  )
-
-# reorder all item columns from F01 to F60 for a cleaner dataset
-cov_cols <- c("id", "cov_gender", "cov_age", "cov_degree")
-
-item_cols <- names(df_wide)[grepl("^F\\d+", names(df_wide))]
-item_cols <- item_cols[order(as.numeric(gsub("[^0-9]", "", item_cols)))]
-
-df_wide <- df_wide[, c(cov_cols, item_cols)]
-
-# identify and reverse-score the reverse items
+# identify and reverse-score the reverse items of HEXACO
 reverse_items <- c(
   # Honesty-Humility
   "F12r", "F24r", "F30r", "F42r", "F48r", "F60r",
@@ -35,10 +18,10 @@ reverse_items <- c(
   "F01r", "F31r", "F49r"
 )
 
-reverse_items <- intersect(reverse_items, names(df_wide))
+reverse_items <- intersect(reverse_items, names(df))
 
 for (item in reverse_items){
-  df_wide[[item]] <- 6 - df_wide[[item]]
+  df[[item]] <- 6 - df[[item]]
 }
 
 # calculate scores for each HEXACO dimension
@@ -60,9 +43,39 @@ C_items <- c("F02", "F26r", "F08", "F32r", "F14r", "F38", "F50",
 O_items <- c("F01r", "F25", "F07", "F31r", "F13", "F37",
              "F49r", "F19", "F43", "F55")
 
-df_wide$H <- rowMeans(df_wide[, H_items], na.rm = TRUE)
-df_wide$E <- rowMeans(df_wide[, E_items], na.rm = TRUE)
-df_wide$X <- rowMeans(df_wide[, X_items], na.rm = TRUE)
-df_wide$A <- rowMeans(df_wide[, A_items], na.rm = TRUE)
-df_wide$C <- rowMeans(df_wide[, C_items], na.rm = TRUE)
-df_wide$O <- rowMeans(df_wide[, O_items], na.rm = TRUE)
+df$H <- rowMeans(df[, H_items], na.rm = TRUE)
+df$E <- rowMeans(df[, E_items], na.rm = TRUE)
+df$X <- rowMeans(df[, X_items], na.rm = TRUE)
+df$A <- rowMeans(df[, A_items], na.rm = TRUE)
+df$C <- rowMeans(df[, C_items], na.rm = TRUE)
+df$O <- rowMeans(df[, O_items], na.rm = TRUE)
+
+# TWQ has six dimensions: Communication (CMNC), Coordination (CRDN),
+# Balance (BLNC), Support (SPRT), Commitment (COMT), Cohesion (COHS)
+
+# identify and reverse-score the reverse items of TWQ
+twq_reverse <- c("CMNC04r", "CMNC06r", "CMNC07r", "CRDN4r", "BLNC3r",
+                 "COMT4r", "COHS02r", "COHS06r")
+
+for (item in intersect(twq_reverse, names(df))) {
+  df[[item]] <- 6 - df[[item]]
+}
+
+CMNC_items <- c("CMNC01", "CMNC02", "CMNC03", "CMNC04r", "CMNC05", 
+                "CMNC06r", "CMNC07r", "CMNC08", "CMNC09", "CMNC10")
+CRDN_items <- c("CRDN1", "CRDN2", "CRDN3", "CRDN4r")
+BLNC_items <- c("BLNC1", "BLNC2", "BLNC3r")
+SPRT_items <- c("SPRT1", "SPRT2", "SPRT3", "SPRT4", "SPRT5", "SPRT6")
+COMT_items <- c("COMT1", "COMT2", "COMT3", "COMT4r")
+COHS_items <- c("COHS01", "COHS02r", "COHS03", "COHS04", "COHS05", 
+                "COHS06r", "COHS07", "COHS08", "COHS09", "COHS10")
+
+# calculate scores for each TWQ dimension
+df$communication <- round(rowMeans(df[, CMNC_items], na.rm = TRUE),2)
+df$coordination  <- rowMeans(df[, CRDN_items], na.rm = TRUE)
+df$balance       <- rowMeans(df[, BLNC_items], na.rm = TRUE)
+df$support       <- rowMeans(df[, SPRT_items], na.rm = TRUE)
+df$commitment    <- rowMeans(df[, COMT_items], na.rm = TRUE)
+df$cohesion      <- rowMeans(df[, COHS_items], na.rm = TRUE)
+
+names(df)
