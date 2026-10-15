@@ -1,0 +1,42 @@
+---
+title: "Personality & Teamwork Quality Explorer"
+output: html_document
+---
+
+## Project overview
+
+This project explores associations between HEXACO personality traits
+and teamwork quality using questionnaire data.
+
+It also includes a Shiny app for exploring observed relationships and
+simulating hypothetical team-formation strategies. Simulated outcomes
+reflect assumptions, not proven effects on real teams.
+
+## Data and scoring
+
+The dataset contains 54 respondents and includes personality and
+teamwork-quality questionnaire items.
+
+The scoring rules and treatment of missing responses must be checked
+against the study documentation before interpreting results.
+
+## Statistical analysis
+
+This section will run the supporting analysis script and explain
+the statistical results and plot.
+
+## Interactive app
+
+This section will provide the command to launch the Shiny app and
+explain how to use its controls.
+
+## Limitations
+
+Participants are grouped within existing teams, which must be
+considered when choosing and interpreting the statistical analysis.
+Observed associations do not establish causation.
+
+## References
+
+- Study materials: https://osf.io/jb94w/overview
+- Dataset information: https://itemresponsewarehouse.org/tables/zaehl2023_hexaco/
