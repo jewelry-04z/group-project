@@ -22,8 +22,17 @@ against the study documentation before interpreting results.
 
 ## Statistical analysis
 
-This section will run the supporting analysis script and explain
-the statistical results and plot.
+The analysis below examines the association between agreeableness
+and reported communication quality.
+
+```{r analysis}
+source("data_processing.R")
+summary(model)
+```
+
+This analysis is exploratory. The model does not account for
+participants belonging to the same team, and the variables were
+selected after examining correlations.
 
 ## Interactive app
 
