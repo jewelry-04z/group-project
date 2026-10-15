@@ -47,3 +47,14 @@ You can investigate whether personality traits are associated with teamwork qual
 Important limitation 
 
 The personality table has 54 respondents, with 60 questionnaire items per respondent. The accessible data description doesn't establish that you have enough team-level observations and performance outcomes to train a reliable team-performance predictor.
+
+## Requirements
+
+Use R and RStudio. Install the required packages by running this command
+in the RStudio Console:
+
+```r
+install.packages(c("shiny", "ggplot2", "tidyr"))
+```
+
+An internet connection is required to download the dataset from OSF.
