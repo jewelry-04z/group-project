@@ -14,6 +14,8 @@ demonstrate that a grouping strategy improves teamwork in practice.
 This project was developed for the Programming in Psychological Science
 course at the University of Amsterdam.
 
+## Dataset
+
 https://osf.io/jb94w/overview                     <- explanation of variables 
 
 https://itemresponsewarehouse.org/tables/zaehl2023_hexaco/    
@@ -25,7 +27,7 @@ HEXACO personality and teamwork dataset
 
 Source: Philipp Zähl (2023), supplementary research data 
 
-This is the closest match I found to your idea. It contains personality questionnaire responses from students in software teams, along with separate measures of teamwork quality, including cohesion, communication, coordination, commitment, support, and balance.  
+It contains personality questionnaire responses from students in software teams, along with separate measures of teamwork quality, including cohesion, communication, coordination, commitment, support, and balance.  
 
 Item Response Warehouse 
 
