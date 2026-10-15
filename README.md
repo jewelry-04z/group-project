@@ -1,5 +1,18 @@
-# group-project
+# Personality & Teamwork Quality Explorer
 
+This project explores relationships between HEXACO personality traits
+and teamwork quality using questionnaire data.
+
+The Shiny app lets users visualize observed relationships and run
+hypothetical simulations comparing three team-formation strategies:
+random assignment, balancing personality scores across teams, and
+grouping people with similar scores.
+
+Simulated outcomes depend on user-selected assumptions. They do not
+demonstrate that a grouping strategy improves teamwork in practice.
+
+This project was developed for the Programming in Psychological Science
+course at the University of Amsterdam.
 
 https://osf.io/jb94w/overview                     <- explanation of variables 
 
