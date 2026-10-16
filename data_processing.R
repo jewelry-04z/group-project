@@ -112,3 +112,4 @@ keep_vars <- c(
 df_clean <- df[, keep_vars]
 
 write.csv(df_clean, "processed_data.csv", row.names = FALSE)
+write.csv(df, "processed_data_raw.csv", row.names = FALSE)

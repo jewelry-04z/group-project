@@ -1,11 +1,16 @@
-# this file contains:....(not finished haha)
+# This file contains:
+# Descriptive statistics(SD, Mean)
+# Distribution plots for HEXACO and TWQ dimensions
+# Correlation analysis (matrix and heatmap)
+# Scatterplots with regression lines
+
 df <- read.csv("processed_data.csv")
 
 # Summary table: mean and SD for HEXACO and TWQ
 vars <- c("honesty_humility", "emotionality", "extraversion", 
           "agreeableness", "conscientiousness", "openness",
           "communication", "coordination", "balance",
-          "support", "commitment", "cohesion")
+          "support", "commitment", "cohesion", "twq_overall")
 
 summary_table <- data.frame(
   variable = vars,
@@ -13,11 +18,14 @@ summary_table <- data.frame(
   sd = sapply(df[, vars], sd, na.rm = TRUE)
 )
 
-summary_table$type <- c(rep("HEXACO", 6), rep("TWQ", 6))
+summary_table$type <- c(rep("HEXACO", 6), rep("TWQ", 6), "twq_overall")
 summary_table$mean <- round(summary_table$mean, 2)
 summary_table$sd <- round(summary_table$sd, 2)
 
 # distributions of HEXACO and TWQ
+library(dplyr)
+library(tidyr)
+
 df %>%
   pivot_longer(cols = all_of(vars),
                names_to = "variable",
@@ -60,29 +68,40 @@ melt(cor_mat) %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "", y = "", fill = "r")
 
-
-
-
-
-
-
-
-# an example of plotting
-# I chose "agreeableness" (HEXACO) and "communication" (TWQ) as an example,
-# because they showed the strongest correlation.
+# "agreeableness" (HEXACO) with "support" and "communication" (TWQ)
+# showed the strongest correlation (r = 0.38 / 0.36).
 library(ggplot2)
 
-ggplot(df, aes(x = agreeableness, y = communication)) +
+df_long <- df %>%
+  pivot_longer(cols = c(support, communication),
+               names_to = "twq_dim",
+               values_to = "twq_score")
+
+ggplot(df_long, aes(x = agreeableness, y = twq_score)) +
   geom_point(alpha = 0.6) +
   geom_smooth(method = "lm", se = TRUE, color = "blue") +
-  labs(
-    x = "Agreebleness",
-    y = "Communication",
-    title = "Agreebleness vs Communication"
-  ) +
+  facet_wrap(~ twq_dim, scales = "free_y") +
+  labs(x = "Agreeableness", y = "TWQ score",
+       title = "Agreeableness vs TWQ dimensions") +
   theme_classic()
 
-# also here is the example of regression.
-# regression: does agreeableness predict communication?
-model <- lm(communication ~ agreeableness, data = df)
-summary(model)
+# Each HEXACO trait vs overall teamwork quality.
+# Emotionality shows a negative association with teamwork quality.
+df_long_overall <- df %>%
+  pivot_longer(
+    cols = c(honesty_humility, emotionality, extraversion,
+             agreeableness, conscientiousness, openness),
+    names_to = "trait",
+    values_to = "trait_score"
+  )
+
+ggplot(df_long_overall, aes(x = trait_score, y = twq_overall)) +
+  geom_point(alpha = 0.6, color = "#28778D") +
+  geom_smooth(method = "lm", se = TRUE, color = "#D18A35") +
+  facet_wrap(~ trait, scales = "free_x") +
+  labs(
+    x = "HEXACO trait score",
+    y = "Overall Teamwork Quality",
+    title = "HEXACO traits vs Overall Teamwork Quality"
+  ) +
+  theme_classic()
