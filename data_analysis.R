@@ -36,6 +36,8 @@ df %>%
   theme_minimal() +
   labs(title = "Distributions of HEXACO and TWQ scores")
 
+ggsave("Distributions of HEXACO and TWQ scores.png")
+
 # correlation analysis for every dimension
 cor_vars <- c("honesty_humility", "emotionality", "extraversion",
               "agreeableness", "conscientiousness", "openness",
@@ -55,6 +57,12 @@ cor_hexaco_overall <- cor(df[, hexaco_vars],
 
 round(cor_hexaco_overall, 2)
 
+cor_hexaco_overall_df <- data.frame(
+  HEXACO_trait = rownames(cor_hexaco_overall),
+  twq_overall = as.numeric(cor_hexaco_overall),
+  row.names = NULL
+)
+
 # correlation heatmap
 library(reshape2)
 
@@ -67,6 +75,8 @@ melt(cor_mat) %>%
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "", y = "", fill = "r")
+
+ggsave("plot_heatmap.png")
 
 # "agreeableness" (HEXACO) with "support" and "communication" (TWQ)
 # showed the strongest correlation (r = 0.38 / 0.36).
@@ -84,6 +94,8 @@ ggplot(df_long, aes(x = agreeableness, y = twq_score)) +
   labs(x = "Agreeableness", y = "TWQ score",
        title = "Agreeableness vs TWQ dimensions") +
   theme_classic()
+
+ggsave("plot_scatter_agreeableness.png")
 
 # Each HEXACO trait vs overall teamwork quality.
 # Emotionality shows a negative association with teamwork quality.
@@ -105,3 +117,5 @@ ggplot(df_long_overall, aes(x = trait_score, y = twq_overall)) +
     title = "HEXACO traits vs Overall Teamwork Quality"
   ) +
   theme_classic()
+
+ggsave("plot_scatter_overall.png")
